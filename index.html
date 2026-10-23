@@ -6,153 +6,339 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Era Companion" />
-  <title>Era University Daily Companion</title>
-  
-  <!-- Tailwind CSS & Lucide Icons -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-
+  <title>Era Daily Companion</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
-    .safe-top { padding-top: env(safe-area-inset-top); }
-    .safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 5rem); }
+    body {
+      background-color: #090d16;
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding-top: env(safe-area-inset-top, 20px);
+      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 80px);
+    }
+    header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
+      position: sticky;
+      top: 0;
+      background: rgba(9, 13, 22, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #10b981;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .container {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 78, 59, 0.2));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .cat-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 10px 4px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+    }
+    .cat-btn.active {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+      color: #34d399;
+    }
+    .presets {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
+    }
+    .chip {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f1f5f9;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    input {
+      background: #090d16;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      width: 100%;
+      outline: none;
+    }
+    input:focus {
+      border-color: #10b981;
+    }
+    .btn-submit {
+      width: 100%;
+      background: #10b981;
+      color: #042f2e;
+      border: none;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .sub-card {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .sub-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .bar-bg {
+      background: #1e293b;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+    .att-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn-att {
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      border: 1px solid;
+    }
+    .btn-present {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+    .btn-absent {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.4);
+      color: #fb7185;
+    }
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(9, 13, 22, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 calc(env(safe-area-inset-bottom, 10px) + 8px);
+      z-index: 50;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .nav-btn.active {
+      color: #10b981;
+    }
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen safe-top safe-bottom">
+<body>
 
-  <!-- Header -->
-  <header class="px-5 pt-3 pb-4 border-b border-slate-800/80 sticky top-0 bg-slate-950/80 backdrop-blur-md z-30 flex justify-between items-center">
+  <header>
     <div>
-      <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">Era University</span>
-      <h1 class="text-xl font-bold tracking-tight">Daily Companion</h1>
+      <div class="badge">Era University</div>
+      <h1>Daily Companion</h1>
     </div>
-    <div id="today-date" class="text-xs text-slate-400 text-right"></div>
+    <div id="today-date" style="font-size: 12px; color: #94a3b8; text-align: right;"></div>
   </header>
 
-  <!-- TAB 1: EXPENSES -->
-  <main id="tab-expenses" class="p-4 space-y-4">
-    <!-- Today's Spend Banner -->
-    <div class="bg-gradient-to-r from-emerald-600/20 to-teal-600/10 border border-emerald-500/20 rounded-2xl p-4 flex justify-between items-center">
+  <!-- TAB: EXPENSES -->
+  <main id="tab-expenses" class="container">
+    <div class="card banner">
       <div>
-        <p class="text-xs text-emerald-300 font-medium uppercase tracking-wider">Aaj Ka Kharcha</p>
-        <h2 id="today-total-expense" class="text-3xl font-extrabold text-white mt-0.5">₹0</h2>
+        <p style="font-size: 11px; text-transform: uppercase; color: #a7f3d0; font-weight: 600;">Aaj Ka Kharcha</p>
+        <h2 id="today-total" style="font-size: 32px; font-weight: 800; color: #fff; margin-top: 2px;">₹0</h2>
       </div>
-      <div class="text-right">
-        <p class="text-xs text-slate-400">Total Entries</p>
-        <span id="today-entry-count" class="text-sm font-semibold text-slate-200">0</span>
+      <div style="text-align: right;">
+        <p style="font-size: 11px; color: #94a3b8;">Total Logs</p>
+        <p id="today-count" style="font-size: 15px; font-weight: 700; color: #f1f5f9;">0</p>
       </div>
     </div>
 
-    <!-- Quick Add Form -->
-    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-3">
-      <h3 class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Add Daily Expense
-      </h3>
-
-      <!-- Categories -->
-      <div class="grid grid-cols-4 gap-2 text-xs">
-        <button type="button" onclick="selectCategory('Cigarettes')" class="cat-btn py-2 px-1 rounded-xl border border-slate-700 bg-slate-800/60 font-medium active:scale-95 transition" data-cat="Cigarettes">🚬 Cigarette</button>
-        <button type="button" onclick="selectCategory('Chai')" class="cat-btn py-2 px-1 rounded-xl border border-slate-700 bg-slate-800/60 font-medium active:scale-95 transition" data-cat="Chai">☕ Chai</button>
-        <button type="button" onclick="selectCategory('Conveyance')" class="cat-btn py-2 px-1 rounded-xl border border-slate-700 bg-slate-800/60 font-medium active:scale-95 transition" data-cat="Conveyance">🚌 Auto/Cab</button>
-        <button type="button" onclick="selectCategory('Other')" class="cat-btn py-2 px-1 rounded-xl border border-slate-700 bg-slate-800/60 font-medium active:scale-95 transition" data-cat="Other">✨ Other</button>
+    <div class="card">
+      <p style="font-size: 13px; font-weight: 700; color: #e2e8f0; margin-bottom: 8px;">Select Category</p>
+      <div class="grid-4">
+        <button type="button" class="cat-btn active" onclick="setCategory('Cigarettes', this)">🚬 Cigarette</button>
+        <button type="button" class="cat-btn" onclick="setCategory('Chai', this)">☕ Chai</button>
+        <button type="button" class="cat-btn" onclick="setCategory('Conveyance', this)">🚌 Auto/Cab</button>
+        <button type="button" class="cat-btn" onclick="setCategory('Other', this)">✨ Other</button>
       </div>
 
-      <!-- Quick Amount Presets -->
-      <div class="flex gap-2">
-        <button onclick="setAmount(10)" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold hover:border-emerald-500">₹10</button>
-        <button onclick="setAmount(18)" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold hover:border-emerald-500">₹18</button>
-        <button onclick="setAmount(20)" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold hover:border-emerald-500">₹20</button>
-        <button onclick="setAmount(50)" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold hover:border-emerald-500">₹50</button>
-        <button onclick="setAmount(100)" class="px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-semibold hover:border-emerald-500">₹100</button>
+      <div class="presets">
+        <button type="button" class="chip" onclick="setPreset(10)">₹10</button>
+        <button type="button" class="chip" onclick="setPreset(18)">₹18</button>
+        <button type="button" class="chip" onclick="setPreset(20)">₹20</button>
+        <button type="button" class="chip" onclick="setPreset(50)">₹50</button>
+        <button type="button" class="chip" onclick="setPreset(100)">₹100</button>
       </div>
 
-      <div class="flex gap-2">
-        <input type="number" id="expense-amount" placeholder="Amount (₹)" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
-        <input type="text" id="expense-note" placeholder="Note (optional)" class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" />
+      <div class="input-row">
+        <input type="number" id="inp-amount" placeholder="Amount (₹)" inputmode="decimal" />
+        <input type="text" id="inp-note" placeholder="Note (optional)" />
       </div>
 
-      <button onclick="addExpense()" class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 active:scale-98 text-slate-950 font-bold text-sm rounded-xl transition flex items-center justify-center gap-2">
-        <i data-lucide="check" class="w-4 h-4"></i> Save Kharcha
-      </button>
+      <button type="button" class="btn-submit" onclick="addExpense()">Save Kharcha</button>
     </div>
 
-    <!-- Today's Logs -->
-    <div class="space-y-2">
-      <h3 class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Aaj Ki Entries</h3>
-      <div id="expense-list" class="space-y-2">
-        <!-- Rendered dynamically -->
-      </div>
+    <div>
+      <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 10px;">Aaj Ki Entries</p>
+      <div id="expense-list"></div>
     </div>
   </main>
 
-  <!-- TAB 2: ATTENDANCE -->
-  <main id="tab-attendance" class="p-4 space-y-4 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-      <div class="flex justify-between items-center mb-1">
-        <h2 class="text-base font-bold text-slate-200">Overall Attendance</h2>
-        <span id="overall-percentage" class="text-lg font-black text-emerald-400">0%</span>
+  <!-- TAB: ATTENDANCE -->
+  <main id="tab-attendance" class="container hidden">
+    <div class="card banner">
+      <div>
+        <p style="font-size: 11px; text-transform: uppercase; color: #a7f3d0; font-weight: 600;">Overall Attendance</p>
+        <h2 id="overall-pct" style="font-size: 32px; font-weight: 800; color: #fff;">0%</h2>
       </div>
-      <p class="text-xs text-slate-400">Target: 75% for exam eligibility</p>
+      <p style="font-size: 12px; color: #94a3b8;">Target: 75%</p>
     </div>
 
-    <!-- Subjects -->
-    <div id="subjects-container" class="space-y-3">
-      <!-- Rendered dynamically -->
-    </div>
+    <div id="subjects-container"></div>
   </main>
 
-  <!-- Bottom Navigation Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-950/90 backdrop-blur-md border-t border-slate-800/80 px-6 py-2.5 flex justify-around items-center z-40">
-    <button onclick="switchTab('expenses')" id="nav-expenses" class="flex flex-col items-center gap-1 text-emerald-400">
-      <i data-lucide="wallet" class="w-5 h-5"></i>
-      <span class="text-[11px] font-semibold">Kharcha</span>
+  <!-- Navigation Bar -->
+  <nav>
+    <button type="button" id="btn-tab-exp" class="nav-btn active" onclick="switchTab('expenses')">
+      <span style="font-size: 18px;">💳</span>
+      <span>Kharcha</span>
     </button>
-    <button onclick="switchTab('attendance')" id="nav-attendance" class="flex flex-col items-center gap-1 text-slate-500">
-      <i data-lucide="graduation-cap" class="w-5 h-5"></i>
-      <span class="text-[11px] font-semibold">Attendance</span>
+    <button type="button" id="btn-tab-att" class="nav-btn" onclick="switchTab('attendance')">
+      <span style="font-size: 18px;">🎓</span>
+      <span>Attendance</span>
     </button>
   </nav>
 
   <script>
-    // Initial Subjects Setup
-    const defaultSubjects = [
-      { id: 'cog', name: 'Pharmacognosy', attended: 0, total: 0 },
-      { id: 'vidyut', name: 'Vidyut Sir', attended: 0, total: 0 },
-      { id: 'minshu', name: 'Minshu Ma\'am', attended: 0, total: 0 },
-      { id: 'sadaf', name: 'Sadaf Ma\'am', attended: 0, total: 0 },
-      { id: 'python', name: 'Python', attended: 0, total: 0 }
+    var currentCat = 'Cigarettes';
+    var defaultSubjects = [
+      { name: 'Pharmacognosy', attended: 0, total: 0 },
+      { name: 'Vidyut Sir', attended: 0, total: 0 },
+      { name: 'Minshu Ma\'am', attended: 0, total: 0 },
+      { name: 'Sadaf Ma\'am', attended: 0, total: 0 },
+      { name: 'Python', attended: 0, total: 0 }
     ];
 
-    let currentCategory = 'Cigarettes';
-    let expenses = JSON.parse(localStorage.getItem('era_expenses') || '[]');
-    let subjects = JSON.parse(localStorage.getItem('era_subjects') || JSON.stringify(defaultSubjects));
+    function getStorage(key, fallback) {
+      try {
+        var data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function setStorage(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {}
+    }
+
+    var expenses = getStorage('era_expenses', []);
+    var subjects = getStorage('era_subjects', defaultSubjects);
 
     function init() {
-      document.getElementById('today-date').innerText = new Date().toLocaleDateString('en-IN', {
-        weekday: 'short', day: 'numeric', month: 'short'
-      });
-      selectCategory('Cigarettes');
+      var d = new Date();
+      var options = { weekday: 'short', day: 'numeric', month: 'short' };
+      document.getElementById('today-date').innerText = d.toLocaleDateString('en-IN', options);
       renderExpenses();
       renderSubjects();
-      lucide.createIcons();
     }
 
     function switchTab(tab) {
-      const expTab = document.getElementById('tab-expenses');
-      const attTab = document.getElementById('tab-attendance');
-      const navExp = document.getElementById('nav-expenses');
-      const navAtt = document.getElementById('nav-attendance');
-
-      if (tab === 'expenses') {
-        expTab.classList.remove('hidden');
-        attTab.classList.add('hidden');
-        navExp.className = 'flex flex-col items-center gap-1 text-emerald-400';
-        navAtt.className = 'flex flex-col items-center gap-1 text-slate-500';
-      } else {
-        expTab.classList.add('hidden');
-        attTab.classList.remove('hidden');
-        navAtt.className = 'flex flex-col items-center gap-1 text-emerald-
+      var expTab = document.getElementById('tab-expenses');
+      var attTab = document.
